@@ -24,4 +24,4 @@ s2 = Student("sham",23)
 print(s2.name,s2.age)
 
 s3 = Students("Deva",18,98)
-print
+print(s3.name,s3.age,s3.marks)
