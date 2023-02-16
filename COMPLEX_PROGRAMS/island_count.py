@@ -28,3 +28,4 @@ for i in range(1,l1-1):
             fill(i,j,box,res)
 print(c)
             
+#output : 2
