@@ -1,8 +1,11 @@
 import mysql.connector
 from prettytable import from_db_cursor
 
-conn = mysql.connector.connect(user='root', password='', host='localhost', database='customer')
+conn = mysql.connector.connect(user='root', password='12345678', host='localhost',port='3308', database='customer')
 cursor = conn.cursor()
+
+
+
 
 
 while True:
@@ -114,49 +117,32 @@ while True:
         s2 = s2.replace("'),)]",'')
         s2 = s2.replace("[(Decimal('",'')
         # print("\nTotal bill :",s2)
-        if s2.isnumeric():
-            s = f"SELECT p.PNAME AS 'PRODUCT_NAME',p.PRICE AS PRICE,b.QUAN,p.PRICE * b.QUAN as 'AMOUNT' FROM buy as b inner join products as p using(PID) where CID={a} and IS_PAID='NOT PAID'"
-            cursor.execute(s)
-            print(from_db_cursor(cursor))
-            print("\nTotal bill :",s2)
-            pay = int(input("Pay the bill amuont: "))
-            if str(pay)==str(s2):
-                print("Bill is paid Successfully")
-                ss2 = f"UPDATE buy SET IS_PAID = 'PAID' WHERE CID = {a}"
-                cursor.execute(ss2)
+        k = 0
+        while k==0:
+            print()
+            if s2.isnumeric():
+                s = f"SELECT p.PNAME AS 'PRODUCT_NAME',p.PRICE AS PRICE,b.QUAN,p.PRICE * b.QUAN as 'AMOUNT' FROM buy as b inner join products as p using(PID) where CID={a} and IS_PAID='NOT PAID'"
+                cursor.execute(s)
+                print(from_db_cursor(cursor))
+                print("\nTotal bill :",s2)
+                pay = int(input("Pay the bill amuont: "))
+                if str(pay)==str(s2):
+                        print("Bill is paid Successfully")
+                        ss2 = f"UPDATE buy SET IS_PAID = 'PAID' WHERE CID = {a}"
+                        cursor.execute(ss2)
+                        k=1
+                else:
+                        print("Enter the correct amount")
+                        k=0
             else:
-                print("Enter the correct amount")
-        else:
-            print("No bill for you")
-                
+                print("No bill for you")
+                break
         
     
     if inp == 4:
         break
 
 conn.commit()
-conn.close()
+conn.close()   
 
-
-# ot2001
-# 52882 
-
-# CID	
-# PID	
-# QUAN	
-# IS_PAID
-
-
-# =============================================================================
-# from prettytable import ALL, FRAME
-# tab = PrettyTable(table[0])
-# tab.add_rows(table[1:])
-# tab.hrules = ALL
-# tab.vrules = FRAME
-# tab.int_format = '8'
-# tab.padding_width = 2
-# tab.junction_char = '.'
-# tab.sortby = 'col 2'
-# print(tab)
-# =============================================================================
 
