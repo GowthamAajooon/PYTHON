@@ -20,50 +20,99 @@ while True:
         c1 = cursor.fetchall()
         for i in range(len(c1)):
             if c1[i][0]==admin_id and c1[i][1]==admin_pwd:
-                print("""
-                      1. ADD PRODUCTS
-                      2. UPDATE PRODUCTS
-                      3. DELETE PRODUCTS 
-                      4. EXIT
-                      """)        
-                process = int(input()) 
-                if process == 1:
-                    pid = int(input("Enter the PID :"))
-                    pname = input("Enter the PNAME :")
-                    pquan = input("Enter the PQUAN :")
-                    price = int(input("Enter the PRICE :"))
-                    
-                    sql = "INSERT INTO products (PID,PNAME,PQUAN,PRICE) VALUES(%s,%s,%s,%s)"
-                    val = (pid,pname,pquan,price)
-                    cursor.execute(sql,val)
-                    print("\nADDED SUCCESSFULLY")
-                elif process == 2:
+                while True:        
                     print("""
-                          1. QUANTITY 
-                          2. PRICE
-                          """) 
-                    # pid = int(input("Enter the PID :"))
-                    n = int(input("Enter to modify quan or price :"))
-                    if n==1:
+                        1. ADD PRODUCTS
+                        2. UPDATE PRODUCTS
+                        3. DELETE PRODUCTS 
+                        4. EXIT
+                        """)        
+                    process = int(input("Enter to move :")) 
+                    if process == 1: 
+                            pid = int(input("Enter the PID :"))
+                            sql1 = "SELECT * FROM products"
+                            cursor.execute(sql1)
+                            c1 = cursor.fetchall()
+                            d1 = []
+                            for i in range(len(c1)):
+                                d1.append(c1[i][0])
+                            if pid not in d1:
+                                pname = input("Enter the PNAME :")
+                                pquan = input("Enter the PQUAN :")
+                                price = int(input("Enter the PRICE :"))
+                                sql = "INSERT INTO products (PID,PNAME,PQUAN,PRICE) VALUES (%s,%s,%s,%s)"
+                                val = (pid,pname,pquan,price)
+                                cursor.execute(sql,val)
+                                conn.commit()
+                                print("\nADDED SUCCESSFULLY")
+                            else:
+                                print("Product id Already exists.\nUse different Product Id.")
+                            
+                                
+                        
+                            # print("Product id Already exists.\nUse different Product Id.")
+                                
+                    elif process == 2:
+                        while True:                        
+                            print("""
+                                1. QUANTITY 
+                                2. PRICE
+                                3. EXIT
+                                """) 
+                            # pid = int(input("Enter the PID :"))
+                            n = int(input("Enter to modify quan or price :"))
+                            if n==1:
+                                    pid = int(input("Enter the PID :"))
+                                    sql = "SELECT * FROM products"
+                                    cursor.execute(sql)
+                                    c1 = cursor.fetchall()
+                                    for i in range(len(c1)):
+                                        if c1[i][0]==pid:        
+                                            pquan = input("Enter the PQUAN :")
+                                            sql = f"UPDATE products SET PQUAN='{pquan}' WHERE PID={pid}"
+                                            cursor.execute(sql)
+                                            conn.commit()
+                                            print("QUANTITY ADDED SUCCESSFULLY")
+                                            break                                    
+                                    else:
+                                        print("Enter Valid PID")
+                                        
+                            elif n==2:
+                                pid = int(input("Enter the PID :"))
+                                sql = "SELECT * FROM products"
+                                cursor.execute(sql)
+                                c1 = cursor.fetchall()
+                                for i in range(len(c1)):
+                                    if c1[i][0]==pid:        
+                                        price = int(input("Enter the PRICE :"))
+                                        sql = f"UPDATE products SET PRICE = {price} WHERE PID = {pid}"
+                                        cursor.execute(sql)
+                                        conn.commit()
+                                        print("PRICE ADDED SUCCESSFULLY")
+                                        break
+                                else:
+                                    print("Enter Valid PID")
+                            elif n==3:
+                                break
+                                            
+                    elif process == 3:
                         pid = int(input("Enter the PID :"))
-                        pquan = input("Enter the PQUAN :")
-                        sql = f"UPDATE products SET PQUAN = {pquan} WHERE PID={pid}"
+                        sql = "SELECT * FROM products"
                         cursor.execute(sql)
-                        print("QUANTITY ADDED SUCCESSFULLY")
-                    elif n==2:
-                        pid = int(input("Enter the PID :"))
-                        price = int(input("Enter the PRICE :"))
-                        sql = f"UPDATE products SET PRICE = {price} WHERE PID={pid}"
-                        cursor.execute(sql)
-                        print("PRICE ADDED SUCCESSFULLY")
-                    
-                elif process == 3:
-                    pid = int(input("Enter the PID :"))                
-                    sql = f"DELETE FROM products WHERE PID = {pid}"
-                    cursor.execute(sql)
-                    print("DELETED PRODUCT SUCCESSFULLY")
-                elif process == 4:
-                    print("Thank You...")
+                        c1 = cursor.fetchall()
+                        for i in range(len(c1)):
+                            if c1[i][0]==pid:                       
+                                sql = f"DELETE FROM products WHERE PID = {pid}"
+                                cursor.execute(sql)
+                                conn.commit()
+                                print("DELETED PRODUCT SUCCESSFULLY")
+                                break
+                        else:
+                            print("Enter Valid PID")
+                            
+                    elif process == 4:
+                        print("Thank You...")
+                        break
                     
                                 
         
@@ -84,6 +133,7 @@ while True:
                         sql = "INSERT INTO signup (USER_CID,USER_PASSWORD,REGISTERED_DATE) VALUES (%s,%s,date_format(now(),'%d-%m-%y'))"
                         val = (user_id,password)
                         cursor.execute(sql, val)  
+                        conn.commit()
                         print("Signuped succesfully")
                     except:
                         print("Customer Id already exists\nPlease Try different One")
@@ -141,6 +191,7 @@ while True:
                                                             val = (customer, a1, a2,"NOT PAID")
                 
                                                             cursor.execute(sql, val)
+                                                            conn.commit()
                                                             break
                                                         else:
                                                             print("AVAILABLE FROM 1 TO 15")
@@ -161,6 +212,7 @@ while True:
                                                                 sql = "INSERT INTO buy (CID,PID,QUAN,IS_PAID,PURCHASE_DATE) VALUES (%s, %s, %s,%s,date_format(now(),'%d-%m-%y'))"
                                                                 val = (customer, a1, a2,"NOT PAID")   
                                                                 cursor.execute(sql, val)
+                                                                conn.commit()
                                                         
                                                             else:
                                                                 print("AVAILABLE FROM 1 TO 15")
@@ -183,6 +235,7 @@ while True:
                                                     if a1>0 and a1<16:
                                                         sql = f"DELETE FROM buy WHERE PID = {a1}"
                                                         cursor.execute(sql)
+                                                        conn.commit()
                                                         break
                                                     else:
                                                         print("AVAILABLE FROM 1 TO 15")
@@ -195,6 +248,7 @@ while True:
                                                         if a1>0 and a1<16:
                                                             sql = f"DELETE FROM buy WHERE PID = {a1}"
                                                             cursor.execute(sql)
+                                                            conn.commit()
                                                         else:
                                                             print("AVAILABLE FROM 1 TO 15")
                                                     break
@@ -234,6 +288,7 @@ while True:
                                                         print("Bill is paid Successfully")
                                                         ss2 = f"UPDATE buy SET IS_PAID = 'PAID' WHERE CID = {a}"
                                                         cursor.execute(ss2)
+                                                        conn.commit()
                                                         k=1
                                                 else:
                                                         print("Enter the correct amount")
