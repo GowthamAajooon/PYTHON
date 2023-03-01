@@ -17,3 +17,31 @@ for i in s:
         h = h*j
     c.append(h)
 print("EVEN" if sum(c)%2==0 else "ODD")
+
+
+
+'''
+
+1
+2 2
+abc abcd           even
+
+	Input	Expected	Got	
+1
+2 2
+abc abcd
+EVEN
+EVEN
+1
+2 3
+azbde abcher acegk
+ODD
+ODD
+1
+4 3
+everyonehieveryonehello sample javaprogrammingpythonprogramming
+EVEN
+EVEN
+
+
+'''
