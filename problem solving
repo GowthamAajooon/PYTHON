@@ -1,0 +1,72 @@
+PROBLEM SOLVING
+
+PROBLEM 1
+283. Move Zeroes
+
+Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+
+Note that you must do this in-place without making a copy of the array.
+
+ 
+
+Example 1:
+
+Input: nums = [0,1,0,3,12]
+Output: [1,3,12,0,0]
+Example 2:
+
+Input: nums = [0]
+Output: [0]
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+-231 <= nums[i] <= 231 - 1
+
+
+THINKED SOLUTION 
+
+nums = [0,0,1]
+z = []
+
+for i in numS:
+    if i == 0:
+        z.append(i)
+        nums.remove(i)
+nums.extend(z)
+print(nums)
+
+# Output: [0, 1, 0] 
+
+EXPLANATION WHY WRONG?
+
+why thappu na for i in nums: nu koodutha loop oru time tha iterrate agum 
+first time 0 nu edukum z la store agum and nums la 1st 0 remove agidum and nums la balance 
+[0,1] nu irukum loop oru time tha ithula run agum
+z la [0]
+nums la [0,1]
+nums+z nu pota 0,1,0 nu varum 
+
+CORRECT SOLUTION 
+
+nums = [0,0,1]
+z = []
+
+for i in nums[:]:  # Create a copy of nums using nums[:]
+    if i == 0:
+        z.append(i)  # Store zero in a separate list
+        nums.remove(i)  # Remove zero from the original list
+
+nums.extend(z)  # Add zeros back at the end
+print(nums)  
+
+# Output: [1, 0, 0] 
+
+EXPLANATION WHY CORRECT ✅
+
+why correct na nums[:] ipdi for loop la koodutha elements time loop run agum full [0,0,1]
+nala for i in nums[:] koodukum bothu first time z la [0] irukum nums la [0] [0,1] remove agum
+and 2nd time z la [0,0] nu irukum nums la 2nd zero remove agum [1] next third time one irukum if la 
+check agum not equal la irukum apdiyae veliya varum nums la [1] nu irukum
+nums + z nu ipo pota [1][0,0] irukum crt answer
