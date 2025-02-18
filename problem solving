@@ -7,8 +7,6 @@ Given an integer array nums, move all 0's to the end of it while maintaining the
 
 Note that you must do this in-place without making a copy of the array.
 
- 
-
 Example 1:
 
 Input: nums = [0,1,0,3,12]
@@ -26,7 +24,7 @@ Constraints:
 
 
 THINKED SOLUTION 
-
+-----------------
 nums = [0,0,1]
 z = []
 
@@ -38,7 +36,7 @@ nums.extend(z)
 print(nums)
 
 # Output: [0, 1, 0] 
-
+------------------------------------------------------------------------------------------------
 EXPLANATION WHY WRONG?
 
 why thappu na for i in nums: nu koodutha loop oru time tha iterrate agum 
@@ -47,9 +45,9 @@ first time 0 nu edukum z la store agum and nums la 1st 0 remove agidum and nums 
 z la [0]
 nums la [0,1]
 nums+z nu pota 0,1,0 nu varum 
-
+_____________________________________________________________________________________________________
 CORRECT SOLUTION 
-
+-----------------
 nums = [0,0,1]
 z = []
 
@@ -60,9 +58,9 @@ for i in nums[:]:  # Create a copy of nums using nums[:]
 
 nums.extend(z)  # Add zeros back at the end
 print(nums)  
-
+TIME COMPLEXITY => O(n)
 # Output: [1, 0, 0] 
-
+-----------------------------------------------------------------------------------------------------------
 EXPLANATION WHY CORRECT ✅
 
 why correct na nums[:] ipdi for loop la koodutha elements time loop run agum full [0,0,1]
@@ -70,3 +68,89 @@ nala for i in nums[:] koodukum bothu first time z la [0] irukum nums la [0] [0,1
 and 2nd time z la [0,0] nu irukum nums la 2nd zero remove agum [1] next third time one irukum if la 
 check agum not equal la irukum apdiyae veliya varum nums la [1] nu irukum
 nums + z nu ipo pota [1][0,0] irukum crt answer
+
+_______________________________________________________________________________________________________________________
+
+2ND APPROACH MY WRONG CODE
+
+THINKED SOLUTION 
+-----------------
+nums = [0,1,0,3,12]
+for i in range(len(nums)):
+    for j in range(i+1,len(nums)):
+        if nums[i] == 0:
+            pass
+        else:
+            k = nums[i]
+            nums[i] = nums[j]
+            nums[j] = k
+nums.reverse()
+print(nums)
+
+this approach is time exceed
+
+
+REASON WHY THIS APPROACH IS A FAILURE?
+--------------------------------------
+Problems in Your Code
+Nested for loops (O(n²))
+
+The inner loop (for j in range(i+1, len(nums))) swaps elements multiple times, 
+causing excessive operations.
+This results in unnecessary reordering of non-zero elements.
+Incorrect Swapping Logic
+
+When nums[i] == 0, you do nothing (pass), but the loop continues and swaps elements incorrectly.
+Swapping logic does not preserve order of non-zero elements.
+Unnecessary nums.reverse()
+
+The approach is not directly moving zeros to the end, instead, 
+it requires a reversal to fix order, making it more inefficient.
+____________________________________________________________________________________________
+
+2ND APPROACH CORRECTED CODE
+---------------------------
+nums = [1, 0, 0, 3, 12]
+nzi = 0  # Points to where the next non-zero should go
+
+for i in range(len(nums)):
+    if nums[i] != 0:
+        print("bef nums[nzi]",nums[nzi],"bef nzi",nzi,"bef nums",nums[i],"bef i",i)
+        nums[nzi], nums[i] = nums[i], nums[nzi]  # Swap non-zero with the first zero
+        print("afT nums[nzi]",nums[nzi],"afT nzi",nzi,"afT nums",nums[i],"afT i",i)
+        nzi += 1  # Move pointer
+
+print(nums)  # Output: [1, 3, 12, 0, 0] ✅
+
+WHY ITS A CORRECT SOLUTION
+
+bef nums[nzi] 1 bef nzi 0 bef nums 1 bef i 0
+afT nums[nzi] 1 afT nzi 0 afT nums 1 afT i 0
+bef nums[nzi] 0 bef nzi 1 bef nums 3 bef i 3
+afT nums[nzi] 3 afT nzi 1 afT nums 0 afT i 3
+bef nums[nzi] 0 bef nzi 2 bef nums 12 bef i 4
+afT nums[nzi] 12 afT nzi 2 afT nums 0 afT i 4
+[1, 3, 12, 0, 0]
+
+epdi na not equal to 0 va irukara i athavathu index allow pannum
+and extra va oru variable use panrom 0 nu ethuku na 0 and non zero values sa 
+swapp panna.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
